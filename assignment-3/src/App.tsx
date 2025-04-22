@@ -10,21 +10,22 @@ interface User {
 function App() {
   const [users, setUsers] = useState<User[]>([{ name: '', password: '' }]);
   const [errors, setErrors] = useState<{ name?: string; password?: string }[]>([]);
-  const [, setConfirmedUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const nameCounts = countBy(users, 'name');
     const newErrors = users.map((user) => {
       const nameError =
         user.name.length < 3
-          ? '이름은 3글자 이상이어야 합니다.'
+          ? 'Name must be at least 3 characters long.'
           : nameCounts[user.name] > 1
-          ? '이름이 중복되었습니다.'
+          ? `The name '${user.name}' is duplicated.`
           : undefined;
 
       const passwordError =
-        user.password.length < 6
-          ? '비밀번호는 6글자 이상이어야 합니다.'
+        user.password === ''
+          ? 'Password is required.'
+          : user.password.length < 6
+          ? 'Password must be at least 6 characters long.'
           : undefined;
 
       return { name: nameError, password: passwordError };
@@ -51,7 +52,7 @@ function App() {
 
   const handleConfirm = () => {
     const validUsers = users.filter((_, i) => !errors[i]?.name && !errors[i]?.password);
-    setConfirmedUsers(validUsers);
+    console.log('Confirmed Users:', validUsers);
   };
 
   const isConfirmDisabled = users.some((_, i) => errors[i]?.name || errors[i]?.password);

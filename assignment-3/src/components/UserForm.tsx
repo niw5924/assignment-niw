@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface UserFormProps {
   index: number;
@@ -19,15 +19,18 @@ const UserForm: React.FC<UserFormProps> = ({
   nameError,
   passwordError,
 }) => {
+  const [nameTouched, setNameTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
   return (
     <div
       style={{
         border: '1.5px solid #000',
+        borderRadius: '3px',
         padding: '1rem',
         marginBottom: '1rem',
         width: '50%',
         boxSizing: 'border-box',
-        borderRadius: '3px',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -44,44 +47,52 @@ const UserForm: React.FC<UserFormProps> = ({
           ✖
         </button>
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '16px' }}>Name</label>
         <input
           value={name}
           onChange={(e) => onChange(index, 'name', e.target.value)}
+          onFocus={() => setNameTouched(true)}
           style={{
             width: '100%',
             padding: '0.5rem',
-            border: nameError ? '2px solid red' : '1.5px solid grey',
+            border: nameTouched && nameError ? '2px solid red' : '1.5px solid grey',
             borderRadius: '3px',
-            backgroundColor: nameError ? '#ffe5e5' : '#fff',
+            backgroundColor: nameTouched && nameError ? '#ffe5e5' : '#fff',
             color: '#000',
             fontSize: '1rem',
             boxSizing: 'border-box',
             outline: 'none',
           }}
         />
-        {nameError && <div style={{ color: 'red', marginTop: '0.3rem', fontSize: '0.9rem' }}>{nameError}</div>}
+        {nameTouched && nameError && (
+          <div style={{ color: 'red', marginTop: '0.3rem', fontSize: '0.9rem' }}>{nameError}</div>
+        )}
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '16px' }}>Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => onChange(index, 'password', e.target.value)}
+          onFocus={() => setPasswordTouched(true)}
           style={{
             width: '100%',
             padding: '0.5rem',
-            border: passwordError ? '2px solid red' : '1.5px solid grey',
+            border: passwordTouched && passwordError ? '2px solid red' : '1.5px solid grey',
             borderRadius: '3px',
-            backgroundColor: passwordError ? '#ffe5e5' : '#fff',
+            backgroundColor: passwordTouched && passwordError ? '#ffe5e5' : '#fff',
             color: '#000',
             fontSize: '1rem',
             boxSizing: 'border-box',
             outline: 'none',
           }}
         />
-        {passwordError && <div style={{ color: 'red', marginTop: '0.3rem', fontSize: '0.9rem' }}>{passwordError}</div>}
+        {passwordTouched && passwordError && (
+          <div style={{ color: 'red', marginTop: '0.3rem', fontSize: '0.9rem' }}>{passwordError}</div>
+        )}
       </div>
     </div>
   );
